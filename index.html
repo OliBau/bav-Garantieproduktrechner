@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bAV Garantieproduktrechner</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+:root {
+    --primary: #003B7E;
+    --primary-dark: #1A2E4A;
+    --primary-medium: #4A90C4;
+    --primary-light: #D6E8F7;
+    --bg: #EBF3FA;
+    --radius: 8px;
+    --font: 'Arial', 'Helvetica Neue', sans-serif;
+
+    --c-garantie: #1A2E4A;
+    --c-fonds: #003B7E;
+    --c-zusatz: #4A90C4;
+    --c-gesamt: #111;
+    --c-beitraege: #fff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: #222;
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-medium) 100%);
+    color: #fff;
+    padding: 2rem 1.5rem;
+    text-align: center;
+}
+.header h1 {
+    font-size: clamp(1.4rem, 3.5vw, 2rem);
+    font-weight: 700;
+    margin-bottom: .3rem;
+}
+.header p {
+    font-size: .95rem;
+    opacity: .85;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* ===== MAIN GRID ===== */
+.main-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ===== INPUT PANEL ===== */
+.input-panel {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    align-self: start;
+    position: sticky;
+    top: 1rem;
+}
+
+.input-group {
+    margin-bottom: 1.25rem;
+}
+.input-group:last-child { margin-bottom: 0; }
+
+.input-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .4rem;
+}
+.input-label-text {
+    font-size: .85rem;
+    font-weight: 600;
+    color: #444;
+}
+
+.value-combo {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+.value-input-wrap {
+    display: flex;
+    align-items: center;
+    background: #f5f7fa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: .35rem .5rem;
+    min-width: 0;
+}
+.value-input {
+    width: 70px;
+    border: none;
+    background: transparent;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-align: right;
+    outline: none;
+    font-family: var(--font);
+    -moz-appearance: textfield;
+}
+.value-input::-webkit-inner-spin-button,
+.value-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.value-input-suffix {
+    font-size: .85rem;
+    font-weight: 600;
+    color: #666;
+    margin-left: .25rem;
+    white-space: nowrap;
+}
+
+.slider-track {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #ccc;
+    outline: none;
+    cursor: pointer;
+    border: 1px solid #bbb;
+    flex: 1;
+    min-width: 0;
+}
+.slider-track::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--primary);
+    border: 3px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,59,126,.25);
+    cursor: pointer;
+}
+.slider-track::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--primary);
+    border: 3px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,59,126,.25);
+    cursor: pointer;
+}
+
+.input-hint {
+    font-size: .75rem;
+    color: #888;
+    margin-top: .3rem;
+}
+
+/* ===== RENDITE PILLS ===== */
+.pill-group {
+    display: flex;
+    gap: .4rem;
+    flex-wrap: wrap;
+}
+.pill {
+    flex: 1;
+    min-width: 60px;
+    padding: .45rem .3rem;
+    border: 2px solid var(--primary-light);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--primary);
+    font-size: .85rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: var(--font);
+}
+.pill:hover {
+    border-color: var(--primary-medium);
+    background: var(--primary-light);
+}
+.pill.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+/* ===== SZENARIO TOGGLE ===== */
+.toggle-group {
+    display: flex;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 2px solid var(--primary);
+}
+.toggle-btn {
+    flex: 1;
+    padding: .5rem .3rem;
+    font-size: .78rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+    background: #fff;
+    color: var(--primary);
+    border: none;
+    font-family: var(--font);
+}
+.toggle-btn.active {
+    background: var(--primary);
+    color: #fff;
+}
+.toggle-btn:first-child { border-right: 1px solid var(--primary); }
+
+/* ===== CHART PANEL ===== */
+.chart-panel {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    display: flex;
+    flex-direction: column;
+}
+.chart-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    text-align: center;
+    margin-bottom: .75rem;
+}
+.chart-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 380px;
+}
+.chart-wrap canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ===== ERGEBNIS-TABELLE ===== */
+.result-section {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+.result-section h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: .75rem;
+}
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: .75rem;
+}
+.result-card {
+    background: var(--bg);
+    border-radius: 6px;
+    padding: .75rem 1rem;
+    border-left: 3px solid var(--primary);
+}
+.result-card .label {
+    font-size: .75rem;
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+.result-card .value {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-top: .15rem;
+    font-variant-numeric: tabular-nums;
+}
+.result-card .value.highlight {
+    color: var(--primary);
+    font-size: 1.3rem;
+}
+
+/* ===== LEGENDE (custom) ===== */
+.custom-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    justify-content: center;
+    margin-bottom: .5rem;
+    font-size: .8rem;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+}
+.legend-swatch {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+.legend-line {
+    width: 20px; height: 3px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+.legend-line.dashed {
+    background: repeating-linear-gradient(90deg, #555 0, #555 5px, transparent 5px, transparent 8px);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    text-align: center;
+    padding: 1.5rem;
+    font-size: .75rem;
+    color: #999;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 820px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+    .input-panel {
+        position: static;
+    }
+    .chart-wrap { min-height: 320px; }
+}
+
+@media (max-width: 600px) {
+    .header { padding: 1.25rem 1rem; }
+    .container { padding: 1rem; }
+    .result-grid { grid-template-columns: 1fr 1fr; }
+    .chart-wrap { min-height: 260px; }
+    .value-input { width: 60px; font-size: .95rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>bAV Garantieproduktrechner</h1>
+    <p>Fondsgebundene Altersvorsorge mit 70 % Beitragsgarantie – Unterstützungskasse</p>
+</div>
+
+<div class="container">
+
+    <div class="main-grid">
+
+        <!-- EINGABE -->
+        <div class="input-panel">
+
+            <!-- Laufzeit -->
+            <div class="input-group">
+                <div class="input-label">
+                    <span class="input-label-text">Laufzeit</span>
+                </div>
+                <div class="value-combo">
+                    <div class="value-input-wrap">
+                        <input type="number" class="value-input" id="inpLaufzeit" value="20" min="5" max="40" step="1">
+                        <span class="value-input-suffix">Jahre</span>
+                    </div>
+                    <input type="range" class="slider-track" id="slLaufzeit" min="5" max="40" step="1" value="20">
+                </div>
+                <div class="input-hint">Vertragslaufzeit in Jahren (5–40)</div>
+            </div>
+
+            <!-- Beitrag -->
+            <div class="input-group">
+                <div class="input-label">
+                    <span class="input-label-text">Monatlicher Beitrag</span>
+                </div>
+                <div class="value-combo">
+                    <div class="value-input-wrap">
+                        <input type="number" class="value-input" id="inpBeitrag" value="1000" min="50" max="5000" step="1" style="width:80px">
+                        <span class="value-input-suffix">€</span>
+                    </div>
+                    <input type="range" class="slider-track" id="slBeitrag" min="50" max="5000" step="10" value="1000">
+                </div>
+                <div class="input-hint">Monatlicher Beitrag in die Unterstützungskasse</div>
+            </div>
+
+            <!-- Fondsrendite -->
+            <div class="input-group">
+                <div class="input-label">
+                    <span class="input-label-text">Fondsrendite p.a.</span>
+                </div>
+                <div class="pill-group" id="renditePills">
+                    <button class="pill" data-rendite="1.5">1,5 %</button>
+                    <button class="pill" data-rendite="3">3 %</button>
+                    <button class="pill" data-rendite="4.5">4,5 %</button>
+                    <button class="pill active" data-rendite="6">6 %</button>
+                </div>
+            </div>
+
+            <!-- Szenario -->
+            <div class="input-group">
+                <div class="input-label">
+                    <span class="input-label-text">Darstellung</span>
+                </div>
+                <div class="toggle-group" id="szenarioToggle">
+                    <button class="toggle-btn active" data-szenario="bestcase">Mit Zusatzfonds</button>
+                    <button class="toggle-btn" data-szenario="worstcase">Nur Garantieprodukt</button>
+                </div>
+                <div class="input-hint" id="szenarioHint">Garantieprodukt + Zusatzfonds (676 € Direktversicherung ohne Garantie)</div>
+            </div>
+
+        </div>
+
+        <!-- CHART -->
+        <div class="chart-panel">
+            <div class="chart-title" id="chartTitle">Kapitalentwicklung mit Zusatzfonds (676 €) – Laufzeit 20 Jahre</div>
+            <div class="custom-legend" id="customLegend"></div>
+            <div class="chart-wrap">
+                <canvas id="mainChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ERGEBNIS-TABELLE -->
+    <div class="result-section">
+        <h2>Ergebnisse</h2>
+        <div class="result-grid">
+            <div class="result-card">
+                <div class="label">Gesamtbeiträge</div>
+                <div class="value" id="resGesamtbeitraege">–</div>
+            </div>
+            <div class="result-card">
+                <div class="label">Garantieziel (70 %)</div>
+                <div class="value" id="resGarantieziel">–</div>
+            </div>
+            <div class="result-card">
+                <div class="label">Garantie-Trigger</div>
+                <div class="value" id="resTrigger">–</div>
+            </div>
+            <div class="result-card">
+                <div class="label">Fondsvermögen</div>
+                <div class="value" id="resFonds">–</div>
+            </div>
+            <div class="result-card">
+                <div class="label">Garantiesicherheit</div>
+                <div class="value" id="resGarantie">–</div>
+            </div>
+            <div class="result-card">
+                <div class="label">Gesamtvermögen</div>
+                <div class="value highlight" id="resGesamt">–</div>
+            </div>
+            <div class="result-card">
+                <div class="label">Monatliche Kosten</div>
+                <div class="value" id="resKosten">–</div>
+            </div>
+            <div class="result-card">
+                <div class="label">Investierter Beitrag</div>
+                <div class="value" id="resInvest">–</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    Stand: März 2026 · Alle Werte sind modellhafte Hochrechnungen, keine Garantie zukünftiger Ergebnisse.
+</div>
+
+<script>
+(function() {
+    'use strict';
+
+    // ===== KONSTANTEN =====
+    const GARANTIE_NIVEAU = 0.70;
+    const GARANTIE_ZINS_PA = 0.01;
+    const FONDS_TER_PA = 0.005;
+    const KOSTEN_PROZENT = 0.0079;
+    const KOSTEN_FIX = 2.0;
+    const ZUSATZFONDS_BEITRAG = 676;
+
+    // ===== DOM-ELEMENTE =====
+    const slLaufzeit = document.getElementById('slLaufzeit');
+    const inpLaufzeit = document.getElementById('inpLaufzeit');
+    const slBeitrag = document.getElementById('slBeitrag');
+    const inpBeitrag = document.getElementById('inpBeitrag');
+    const renditePills = document.getElementById('renditePills');
+    const szenarioToggle = document.getElementById('szenarioToggle');
+
+    let selectedRendite = 6;
+    let selectedSzenario = 'bestcase';
+    let chart = null;
+
+    // ===== SLIDER/INPUT SYNC =====
+    function syncSlider(slider, input, min, max, defaultVal, step) {
+        slider.addEventListener('input', function() {
+            input.value = this.value;
+            updateAll();
+        });
+        input.addEventListener('input', function() {
+            const raw = parseFloat(this.value);
+            if (!isNaN(raw) && raw >= min && raw <= max) {
+                slider.value = raw;
+                updateAll();
+            }
+        });
+        input.addEventListener('blur', function() {
+            let val = parseFloat(this.value) || defaultVal;
+            val = Math.max(min, Math.min(max, val));
+            if (step >= 1) val = Math.round(val);
+            this.value = val;
+            slider.value = val;
+            updateAll();
+        });
+    }
+
+    syncSlider(slLaufzeit, inpLaufzeit, 5, 40, 20, 1);
+    syncSlider(slBeitrag, inpBeitrag, 50, 5000, 1000, 10);
+
+    // Rendite-Pills
+    renditePills.querySelectorAll('.pill').forEach(function(pill) {
+        pill.addEventListener('click', function() {
+            renditePills.querySelectorAll('.pill').forEach(function(p) { p.classList.remove('active'); });
+            this.classList.add('active');
+            selectedRendite = parseFloat(this.dataset.rendite);
+            updateAll();
+        });
+    });
+
+    // Szenario-Toggle
+    szenarioToggle.querySelectorAll('.toggle-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            szenarioToggle.querySelectorAll('.toggle-btn').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            selectedSzenario = this.dataset.szenario;
+            var hint = document.getElementById('szenarioHint');
+            if (selectedSzenario === 'bestcase') {
+                hint.textContent = 'Garantieprodukt + Zusatzfonds (676 € Direktversicherung ohne Garantie)';
+            } else {
+                hint.textContent = 'Worst-Case: Fondsguthaben wird mit 0 € bewertet für Garantieberechnung';
+            }
+            updateAll();
+        });
+    });
+
+    // ===== RECHENKERN =====
+
+    function berechneGarantieTrigger(laufzeitMonate, beitragNetto, garantieziel) {
+        // Finde kleinstes m sodass FV(m) >= Garantieziel
+        // FV = beitragNetto * ((1+i)^m - 1) / i
+        var iMonat = GARANTIE_ZINS_PA / 12;
+        for (var m = 1; m <= laufzeitMonate; m++) {
+            var fv = beitragNetto * (Math.pow(1 + iMonat, m) - 1) / iMonat;
+            if (fv >= garantieziel) {
+                return laufzeitMonate - m;
+            }
+        }
+        return 0; // Trigger ab Monat 0 = sofort ins Sicherungsvermögen
+    }
+
+    function simuliere(laufzeitJahre, beitrag, fondsRenditePa) {
+        var laufzeitMonate = laufzeitJahre * 12;
+        var gesamtBeitraege = beitrag * laufzeitMonate;
+        var garantieziel = GARANTIE_NIVEAU * gesamtBeitraege;
+
+        // Kosten
+        var monatsKosten = KOSTEN_PROZENT * beitrag + KOSTEN_FIX;
+        var beitragNetto = beitrag - monatsKosten;
+
+        // Monatliche Renditen
+        var fondsRenditeMonat = (fondsRenditePa / 100 - FONDS_TER_PA) / 12;
+        var garantieZinsMonat = GARANTIE_ZINS_PA / 12;
+
+        // Garantie-Trigger
+        var trigger = berechneGarantieTrigger(laufzeitMonate, beitragNetto, garantieziel);
+
+        // Simulation
+        var fondVermoegen = 0;
+        var garantieSicherheit = 0;
+
+        // Arrays für Chart (jährliche Werte)
+        var labels = [];
+        var arrGarantie = [];
+        var arrFonds = [];
+        var arrGesamt = [];
+        var arrBeitraege = [];
+        var arrZusatzfonds = [];
+        var fondsQuoten = {};
+
+        // Zusatzfonds-Simulation
+        var zusatzFonds = 0;
+        var zusatzKosten = KOSTEN_PROZENT * ZUSATZFONDS_BEITRAG + KOSTEN_FIX;
+        var zusatzNetto = ZUSATZFONDS_BEITRAG - zusatzKosten;
+
+        for (var monat = 1; monat <= laufzeitMonate; monat++) {
+            if (monat <= trigger) {
+                // Phase 1: Beitrag geht in Fonds
+                fondVermoegen = (fondVermoegen + beitragNetto) * (1 + fondsRenditeMonat);
+            } else {
+                // Phase 2: Beitrag geht ins Sicherungsvermögen
+                fondVermoegen = fondVermoegen * (1 + fondsRenditeMonat);
+                garantieSicherheit = (garantieSicherheit + beitragNetto) * (1 + garantieZinsMonat);
+            }
+
+            // Zusatzfonds: reine Fondsanlage, gleiche Rendite, gleiche Kostenstruktur
+            zusatzFonds = (zusatzFonds + zusatzNetto) * (1 + fondsRenditeMonat);
+
+            // Jährliche Werte speichern
+            if (monat % 12 === 0) {
+                var jahr = monat / 12;
+                labels.push(jahr);
+                arrGarantie.push(Math.round(garantieSicherheit * 100) / 100);
+                arrFonds.push(Math.round(fondVermoegen * 100) / 100);
+                arrGesamt.push(Math.round((fondVermoegen + garantieSicherheit) * 100) / 100);
+                arrBeitraege.push(beitrag * monat);
+                arrZusatzfonds.push(Math.round(zusatzFonds * 100) / 100);
+
+                // Fondsquote alle 5 Jahre
+                var gesamtVerm = fondVermoegen + garantieSicherheit;
+                if (gesamtVerm > 0 && jahr % 5 === 0) {
+                    fondsQuoten[jahr] = Math.round((fondVermoegen / gesamtVerm) * 100);
+                }
+            }
+        }
+
+        // Endwerte (letzter Monat)
+        var endGesamt = fondVermoegen + garantieSicherheit;
+
+        return {
+            laufzeitMonate: laufzeitMonate,
+            gesamtBeitraege: gesamtBeitraege,
+            garantieziel: garantieziel,
+            triggerMonat: trigger,
+            triggerJahr: Math.round(trigger / 12 * 10) / 10,
+            fondVermoegen: fondVermoegen,
+            garantieSicherheit: garantieSicherheit,
+            gesamtVermoegen: endGesamt,
+            zusatzFonds: zusatzFonds,
+            monatsKosten: monatsKosten,
+            beitragNetto: beitragNetto,
+            labels: labels,
+            arrGarantie: arrGarantie,
+            arrFonds: arrFonds,
+            arrGesamt: arrGesamt,
+            arrBeitraege: arrBeitraege,
+            arrZusatzfonds: arrZusatzfonds,
+            fondsQuoten: fondsQuoten
+        };
+    }
+
+    // ===== FORMATIERUNG =====
+    function fmtEuro(val) {
+        return Math.round(val).toLocaleString('de-DE') + ' €';
+    }
+
+    // ===== CHART =====
+    function buildLegend(isBestCase) {
+        var container = document.getElementById('customLegend');
+        var items = [
+            { type: 'swatch', color: 'var(--c-garantie)', label: 'Garantiesicherheit' },
+            { type: 'swatch', color: 'var(--c-fonds)', label: isBestCase ? 'Fonds Garantieprodukt' : 'Fondvermögen' }
+        ];
+        if (isBestCase) {
+            items.push({ type: 'swatch', color: 'var(--c-zusatz)', label: 'Zusatzfonds 676 €' });
+        }
+        items.push({ type: 'line', color: 'var(--c-gesamt)', label: 'Gesamtvermögen', dashed: false });
+        items.push({ type: 'line', color: '#888', label: isBestCase ? 'Eingezahlte Beiträge' : 'Gezahlte Beiträge', dashed: true });
+
+        container.innerHTML = '';
+        items.forEach(function(it) {
+            var el = document.createElement('span');
+            el.className = 'legend-item';
+            if (it.type === 'swatch') {
+                el.innerHTML = '<span class="legend-swatch" style="background:' + it.color + '"></span>' + it.label;
+            } else {
+                var cls = it.dashed ? 'legend-line dashed' : 'legend-line';
+                var bg = it.dashed ? '' : 'background:' + it.color;
+                el.innerHTML = '<span class="' + cls + '" style="' + bg + '"></span>' + it.label;
+            }
+            container.appendChild(el);
+        });
+    }
+
+    function updateChart(data) {
+        var isBestCase = selectedSzenario === 'bestcase';
+        var laufzeit = parseInt(inpLaufzeit.value) || 20;
+
+        // Titel
+        var titleEl = document.getElementById('chartTitle');
+        if (isBestCase) {
+            titleEl.textContent = 'Kapitalentwicklung mit Zusatzfonds (676 €) – Laufzeit ' + laufzeit + ' Jahre';
+        } else {
+            titleEl.textContent = 'Kapitalentwicklung mit 70 % Beitragsgarantie (Worst-Case-Garantie-Trigger)';
+        }
+
+        buildLegend(isBestCase);
+
+        // Datasets
+        var datasets = [];
+
+        // Garantiesicherheit (Basis-Fläche)
+        datasets.push({
+            label: 'Garantiesicherheit',
+            data: data.arrGarantie,
+            backgroundColor: 'rgba(26,46,74,0.85)',
+            borderColor: 'rgba(26,46,74,0.9)',
+            borderWidth: 1,
+            fill: 'origin',
+            pointRadius: 0,
+            tension: 0.3,
+            order: 4
+        });
+
+        // Fondsvermögen (stacked auf Garantie)
+        datasets.push({
+            label: isBestCase ? 'Fonds Garantieprodukt' : 'Fondvermögen',
+            data: data.arrFonds,
+            backgroundColor: 'rgba(0,59,126,0.7)',
+            borderColor: 'rgba(0,59,126,0.8)',
+            borderWidth: 1,
+            fill: '-1',
+            pointRadius: 0,
+            tension: 0.3,
+            order: 3
+        });
+
+        if (isBestCase) {
+            // Zusatzfonds (stacked oben drauf)
+            datasets.push({
+                label: 'Zusatzfonds 676 €',
+                data: data.arrZusatzfonds,
+                backgroundColor: 'rgba(74,144,196,0.6)',
+                borderColor: 'rgba(74,144,196,0.7)',
+                borderWidth: 1,
+                fill: '-1',
+                pointRadius: 0,
+                tension: 0.3,
+                order: 2
+            });
+        }
+
+        // Gesamtvermögen Linie
+        var gesamtData = data.arrGesamt.map(function(v, i) {
+            return isBestCase ? v + data.arrZusatzfonds[i] : v;
+        });
+        datasets.push({
+            label: 'Gesamtvermögen',
+            data: gesamtData,
+            borderColor: '#111',
+            borderWidth: 2.5,
+            fill: false,
+            pointRadius: 0,
+            tension: 0.3,
+            order: 1
+        });
+
+        // Eingezahlte Beiträge (gestrichelt)
+        var beitraegeData = data.arrBeitraege.map(function(v, i) {
+            return isBestCase ? v + ZUSATZFONDS_BEITRAG * (i + 1) * 12 : v;
+        });
+        datasets.push({
+            label: 'Eingezahlte Beiträge',
+            data: beitraegeData,
+            borderColor: '#888',
+            borderWidth: 2,
+            borderDash: [8, 4],
+            fill: false,
+            pointRadius: 0,
+            tension: 0.1,
+            order: 0
+        });
+
+        // Annotations
+        var annotations = {};
+
+        // Garantieziel (horizontal)
+        annotations.garantiezielLine = {
+            type: 'line',
+            yMin: data.garantieziel,
+            yMax: data.garantieziel,
+            borderColor: 'rgba(0,59,126,0.5)',
+            borderWidth: 2,
+            borderDash: [6, 3],
+            label: {
+                display: true,
+                content: 'Garantieziel',
+                position: 'start',
+                backgroundColor: 'rgba(0,59,126,0.8)',
+                color: '#fff',
+                font: { size: 11, weight: 'bold' },
+                padding: 4
+            }
+        };
+
+        // Garantie-Trigger (vertikal)
+        var triggerJahr = data.triggerMonat / 12;
+        if (triggerJahr > 0 && triggerJahr < laufzeit) {
+            annotations.triggerLine = {
+                type: 'line',
+                xMin: triggerJahr,
+                xMax: triggerJahr,
+                borderColor: 'rgba(0,59,126,0.5)',
+                borderWidth: 2,
+                borderDash: [6, 3],
+                label: {
+                    display: true,
+                    content: 'Garantie-Trigger',
+                    position: 'start',
+                    backgroundColor: 'rgba(0,59,126,0.8)',
+                    color: '#fff',
+                    font: { size: 11, weight: 'bold' },
+                    padding: 4,
+                    rotation: -90,
+                    yAdjust: -20
+                }
+            };
+
+            // Phasenbeschriftung: "Garantiesicherung" rechts vom Trigger
+            annotations.phaseLabel = {
+                type: 'label',
+                xValue: triggerJahr + (laufzeit - triggerJahr) / 2,
+                yValue: gesamtData[gesamtData.length - 1] * 0.92,
+                content: 'Garantiesicherung',
+                color: 'rgba(0,59,126,0.6)',
+                font: { size: 13, weight: 'bold' },
+                padding: 0
+            };
+        }
+
+        // Fondsquoten-Labels
+        Object.keys(data.fondsQuoten).forEach(function(jahr) {
+            var idx = parseInt(jahr) - 1;
+            if (idx >= 0 && idx < gesamtData.length) {
+                annotations['fq_' + jahr] = {
+                    type: 'label',
+                    xValue: parseInt(jahr),
+                    yValue: gesamtData[idx],
+                    content: data.fondsQuoten[jahr] + ' % Fonds',
+                    color: '#444',
+                    font: { size: 10, weight: '600' },
+                    yAdjust: -18,
+                    padding: 2
+                };
+            }
+        });
+
+        // Chart config
+        var config = {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Laufzeit (Jahre)',
+                            font: { size: 12, weight: '600' }
+                        },
+                        grid: { color: 'rgba(0,0,0,.06)' }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Kapital (€)',
+                            font: { size: 12, weight: '600' }
+                        },
+                        ticks: {
+                            callback: function(val) {
+                                if (val >= 1000000) return (val / 1000000).toLocaleString('de-DE') + ' Mio.';
+                                return val.toLocaleString('de-DE');
+                            }
+                        },
+                        grid: { color: 'rgba(0,0,0,.06)' },
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) {
+                                return ctx.dataset.label + ': ' + fmtEuro(ctx.parsed.y);
+                            }
+                        }
+                    },
+                    annotation: {
+                        annotations: annotations
+                    }
+                }
+            }
+        };
+
+        if (chart) {
+            chart.destroy();
+        }
+        chart = new Chart(document.getElementById('mainChart'), config);
+    }
+
+    // ===== TABELLE =====
+    function updateTable(data) {
+        var isBestCase = selectedSzenario === 'bestcase';
+
+        var gesamtEnd = isBestCase
+            ? data.gesamtVermoegen + data.zusatzFonds
+            : data.gesamtVermoegen;
+
+        var gesamtBeitraege = isBestCase
+            ? data.gesamtBeitraege + ZUSATZFONDS_BEITRAG * data.laufzeitMonate
+            : data.gesamtBeitraege;
+
+        document.getElementById('resGesamtbeitraege').textContent = fmtEuro(gesamtBeitraege);
+        document.getElementById('resGarantieziel').textContent = fmtEuro(data.garantieziel);
+        document.getElementById('resTrigger').textContent = 'Monat ' + data.triggerMonat + ' (≈ Jahr ' + data.triggerJahr + ')';
+        document.getElementById('resFonds').textContent = fmtEuro(isBestCase ? data.fondVermoegen + data.zusatzFonds : data.fondVermoegen);
+        document.getElementById('resGarantie').textContent = fmtEuro(data.garantieSicherheit);
+        document.getElementById('resGesamt').textContent = fmtEuro(gesamtEnd);
+        document.getElementById('resKosten').textContent = fmtEuro(data.monatsKosten);
+        document.getElementById('resInvest').textContent = fmtEuro(data.beitragNetto);
+    }
+
+    // ===== HAUPT-UPDATE =====
+    function updateAll() {
+        var laufzeit = parseInt(inpLaufzeit.value) || 20;
+        var beitrag = parseFloat(inpBeitrag.value) || 1000;
+
+        var data = simuliere(laufzeit, beitrag, selectedRendite);
+        updateChart(data);
+        updateTable(data);
+    }
+
+    // Initial
+    updateAll();
+
+})();
+</script>
+
+</body>
+</html>
