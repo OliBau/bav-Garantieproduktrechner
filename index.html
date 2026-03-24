@@ -420,7 +420,7 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
                 aG.push(Math.round(gS * 100) / 100); aF.push(Math.round(fV * 100) / 100);
                 aDV.push(Math.round(dvF * 100) / 100); aB.push(inp.gesamtBeitrag * m);
                 var ukT = fV + gS;
-                if (ukT > 0 && j % 5 === 0) fQ[j] = Math.round(fV / ukT * 100);
+                if (ukT > 0 && (j % 5 === 0 || m === lzM)) fQ[j] = Math.round(fV / ukT * 100);
             }
         }
         var gE = fV + gS + dvF;
@@ -495,12 +495,18 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
         }
 
         // Fondsquoten
-        Object.keys(d.fQ).forEach(function(j) {
-            var idx = parseInt(j);
+        var fqKeys = Object.keys(d.fQ).map(Number).sort(function(a,b){return a-b;});
+        fqKeys.forEach(function(j) {
+            var idx = j; // labels[0]=0, labels[1]=1, ...
             if (idx >= 0 && idx < gD.length) {
-                var yAdj = idx === last ? -16 : -16;
-                var xAdj = idx === last ? -30 : 0;
-                ann['fq' + j] = { type: 'label', xValue: parseInt(j), yValue: gD[idx], content: d.fQ[j] + ' % Fonds', color: '#333', font: { size: 10, weight: '600' }, yAdjust: yAdj, xAdjust: xAdj };
+                var isLast = (j === lz);
+                ann['fq' + j] = {
+                    type: 'label', xValue: j, yValue: gD[idx],
+                    content: d.fQ[j] + ' % Fonds', color: '#333',
+                    font: { size: 10, weight: '600' },
+                    yAdjust: -16,
+                    xAdjust: isLast ? -40 : 0
+                };
             }
         });
 
