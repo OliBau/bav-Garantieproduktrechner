@@ -31,32 +31,19 @@ body {
     min-height: 100vh;
 }
 
-/* ===== HEADER ===== */
 .header {
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-medium) 100%);
     color: #fff;
     padding: 2rem 1.5rem;
     text-align: center;
 }
-.header h1 {
-    font-size: clamp(1.4rem, 3.5vw, 2rem);
-    font-weight: 700;
-    margin-bottom: .3rem;
-}
-.header p {
-    font-size: .95rem;
-    opacity: .85;
-}
+.header h1 { font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 700; margin-bottom: .3rem; }
+.header p { font-size: .95rem; opacity: .85; }
 
-/* ===== CONTAINER ===== */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1.5rem;
-}
+.container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
 
-/* ===== MAIN GRID ===== */
-.main-grid {
+/* ===== TOP ROW: Eingabe links + Ergebnisse rechts ===== */
+.top-grid {
     display: grid;
     grid-template-columns: 340px 1fr;
     gap: 1.5rem;
@@ -70,372 +57,141 @@ body {
     padding: 1.5rem;
     box-shadow: 0 1px 4px rgba(0,0,0,.08);
     align-self: start;
-    position: sticky;
-    top: 1rem;
 }
-
-.input-group {
-    margin-bottom: 1.2rem;
-}
+.input-group { margin-bottom: 1.2rem; }
 .input-group:last-child { margin-bottom: 0; }
+.input-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: .35rem; }
+.input-label-text { font-size: .82rem; font-weight: 600; color: #444; }
 
-.input-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: .35rem;
-}
-.input-label-text {
-    font-size: .82rem;
-    font-weight: 600;
-    color: #444;
-}
-
-.value-combo {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-}
+.value-combo { display: flex; align-items: center; gap: .75rem; }
 .value-input-wrap {
-    display: flex;
-    align-items: center;
-    background: #f5f7fa;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: .3rem .45rem;
-    min-width: 0;
+    display: flex; align-items: center; background: #f5f7fa;
+    border: 1px solid #ddd; border-radius: 6px; padding: .3rem .45rem; min-width: 0;
 }
 .value-input {
-    width: 72px;
-    border: none;
-    background: transparent;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--primary);
-    text-align: right;
-    outline: none;
-    font-family: var(--font);
-    -moz-appearance: textfield;
+    width: 72px; border: none; background: transparent; font-size: 1rem;
+    font-weight: 600; color: var(--primary); text-align: right; outline: none;
+    font-family: var(--font); -moz-appearance: textfield;
 }
 .value-input::-webkit-inner-spin-button,
 .value-input::-webkit-outer-spin-button { -webkit-appearance: none; }
-.value-input-suffix {
-    font-size: .82rem;
-    font-weight: 600;
-    color: #666;
-    margin-left: .2rem;
-    white-space: nowrap;
-}
+.value-input-suffix { font-size: .82rem; font-weight: 600; color: #666; margin-left: .2rem; white-space: nowrap; }
 
 .slider-track {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 8px;
-    border-radius: 4px;
-    background: #ccc;
-    outline: none;
-    cursor: pointer;
-    border: 1px solid #bbb;
-    flex: 1;
-    min-width: 0;
+    -webkit-appearance: none; appearance: none; width: 100%; height: 8px;
+    border-radius: 4px; background: #ccc; outline: none; cursor: pointer;
+    border: 1px solid #bbb; flex: 1; min-width: 0;
 }
 .slider-track::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--primary);
-    border: 3px solid #fff;
-    box-shadow: 0 1px 4px rgba(0,59,126,.25);
-    cursor: pointer;
+    -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--primary); border: 3px solid #fff;
+    box-shadow: 0 1px 4px rgba(0,59,126,.25); cursor: pointer;
 }
 .slider-track::-moz-range-thumb {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--primary);
-    border: 3px solid #fff;
-    box-shadow: 0 1px 4px rgba(0,59,126,.25);
-    cursor: pointer;
+    width: 22px; height: 22px; border-radius: 50%; background: var(--primary);
+    border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,59,126,.25); cursor: pointer;
 }
+.input-hint { font-size: .72rem; color: #888; margin-top: .25rem; }
 
-.input-hint {
-    font-size: .72rem;
-    color: #888;
-    margin-top: .25rem;
-}
-
-/* ===== RENDITE PILLS ===== */
-.pill-group {
-    display: flex;
-    gap: .4rem;
-    flex-wrap: wrap;
-}
+.pill-group { display: flex; gap: .4rem; flex-wrap: wrap; }
 .pill {
-    flex: 1;
-    min-width: 55px;
-    padding: .4rem .25rem;
-    border: 2px solid var(--primary-light);
-    border-radius: 6px;
-    background: #fff;
-    color: var(--primary);
-    font-size: .82rem;
-    font-weight: 600;
-    text-align: center;
-    cursor: pointer;
-    transition: all .2s;
-    font-family: var(--font);
+    flex: 1; min-width: 55px; padding: .4rem .25rem; border: 2px solid var(--primary-light);
+    border-radius: 6px; background: #fff; color: var(--primary); font-size: .82rem;
+    font-weight: 600; text-align: center; cursor: pointer; transition: all .2s; font-family: var(--font);
 }
-.pill:hover {
-    border-color: var(--primary-medium);
-    background: var(--primary-light);
-}
-.pill.active {
-    background: var(--primary);
-    color: #fff;
-    border-color: var(--primary);
-}
+.pill:hover { border-color: var(--primary-medium); background: var(--primary-light); }
+.pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-/* ===== SZENARIO TOGGLE ===== */
-.toggle-group {
-    display: flex;
-    border-radius: 6px;
-    overflow: hidden;
-    border: 2px solid var(--primary);
-}
+.toggle-group { display: flex; border-radius: 6px; overflow: hidden; border: 2px solid var(--primary); }
 .toggle-btn {
-    flex: 1;
-    padding: .45rem .25rem;
-    font-size: .75rem;
-    font-weight: 600;
-    text-align: center;
-    cursor: pointer;
-    transition: all .2s;
-    background: #fff;
-    color: var(--primary);
-    border: none;
-    font-family: var(--font);
-    line-height: 1.3;
+    flex: 1; padding: .45rem .25rem; font-size: .75rem; font-weight: 600;
+    text-align: center; cursor: pointer; transition: all .2s; background: #fff;
+    color: var(--primary); border: none; font-family: var(--font); line-height: 1.3;
 }
-.toggle-btn.active {
-    background: var(--primary);
-    color: #fff;
-}
+.toggle-btn.active { background: var(--primary); color: #fff; }
 .toggle-btn:first-child { border-right: 1px solid var(--primary); }
 
-/* ===== DV-BEITRAG SUBGROUP ===== */
 .subgroup {
-    margin-top: .6rem;
-    padding: .7rem;
-    background: var(--primary-light);
-    border-radius: 6px;
-    border: 1px solid rgba(0,59,126,.12);
+    margin-top: .6rem; padding: .7rem; background: var(--primary-light);
+    border-radius: 6px; border: 1px solid rgba(0,59,126,.12);
 }
 .subgroup.hidden { display: none; }
-.subgroup-label {
-    font-size: .72rem;
-    font-weight: 600;
-    color: var(--primary-dark);
-    margin-bottom: .3rem;
-}
+.subgroup-label { font-size: .72rem; font-weight: 600; color: var(--primary-dark); margin-bottom: .3rem; }
 .split-display {
-    display: flex;
-    justify-content: space-between;
-    font-size: .72rem;
-    color: #555;
-    margin-top: .4rem;
-    padding-top: .4rem;
-    border-top: 1px solid rgba(0,59,126,.1);
+    display: flex; justify-content: space-between; font-size: .72rem; color: #555;
+    margin-top: .4rem; padding-top: .4rem; border-top: 1px solid rgba(0,59,126,.1);
 }
-.split-display .split-val {
-    font-weight: 700;
-    color: var(--primary-dark);
-}
+.split-display .split-val { font-weight: 700; color: var(--primary-dark); }
 
-/* ===== CHART PANEL ===== */
-.chart-panel {
-    background: #fff;
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    box-shadow: 0 1px 4px rgba(0,0,0,.08);
-    display: flex;
-    flex-direction: column;
-}
-.chart-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--primary-dark);
-    text-align: center;
-    margin-bottom: .75rem;
-}
-.chart-wrap {
-    position: relative;
-    flex: 1;
-    min-height: 380px;
-}
-.chart-wrap canvas {
-    width: 100% !important;
-    height: 100% !important;
-}
-
-/* ===== ERGEBNIS-SEKTION ===== */
+/* ===== ERGEBNIS-SEKTION (rechts neben Eingabe) ===== */
 .result-section {
     background: #fff;
     border-radius: var(--radius);
     padding: 1.5rem;
     box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    align-self: start;
 }
-
-/* Hero-Ergebnis */
 .result-hero {
-    text-align: center;
-    padding: 1.25rem 1rem;
+    text-align: center; padding: 1.25rem 1rem;
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
-    border-radius: var(--radius);
-    color: #fff;
-    margin-bottom: 1.25rem;
+    border-radius: var(--radius); color: #fff; margin-bottom: 1.25rem;
 }
-.result-hero .hero-label {
-    font-size: .8rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: .8;
-    margin-bottom: .2rem;
-}
-.result-hero .hero-value {
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    font-weight: 800;
-    font-variant-numeric: tabular-nums;
-    line-height: 1.2;
-}
-.result-hero .hero-sub {
-    font-size: .8rem;
-    opacity: .7;
-    margin-top: .3rem;
-}
+.result-hero .hero-label { font-size: .8rem; text-transform: uppercase; letter-spacing: 1px; opacity: .8; margin-bottom: .2rem; }
+.result-hero .hero-value { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.result-hero .hero-sub { font-size: .78rem; opacity: .7; margin-top: .3rem; }
 
-/* Vermögensaufbau-Balken */
-.result-bar-section {
-    margin-bottom: 1.25rem;
-}
-.result-bar-title {
-    font-size: .8rem;
-    font-weight: 600;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: .3px;
-    margin-bottom: .5rem;
-}
-.result-bar-track {
-    display: flex;
-    height: 36px;
-    border-radius: 6px;
-    overflow: hidden;
-    background: #eee;
-}
+.result-bar-section { margin-bottom: 1.25rem; }
+.result-bar-title { font-size: .8rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: .3px; margin-bottom: .5rem; }
+.result-bar-track { display: flex; height: 36px; border-radius: 6px; overflow: hidden; background: #eee; }
 .result-bar-seg {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: .7rem;
-    font-weight: 700;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    transition: width .5s cubic-bezier(.4,0,.2,1);
-    min-width: 0;
+    display: flex; align-items: center; justify-content: center; font-size: .7rem;
+    font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden;
+    transition: width .5s cubic-bezier(.4,0,.2,1); min-width: 0;
 }
 .result-bar-seg.garantie { background: var(--c-garantie); }
 .result-bar-seg.fonds { background: var(--c-fonds); }
 .result-bar-seg.zusatz { background: var(--c-zusatz); }
-.result-bar-labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: .35rem;
-    font-size: .72rem;
-    color: #777;
-}
+.result-bar-labels { display: flex; justify-content: space-between; margin-top: .35rem; font-size: .72rem; color: #777; }
 
-/* Kennzahlen-Grid */
-.result-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: .6rem;
-}
+.result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
 .result-card {
-    background: var(--bg);
-    border-radius: 6px;
-    padding: .65rem .75rem;
-    text-align: center;
-    transition: transform .15s;
+    background: var(--bg); border-radius: 6px; padding: .65rem .75rem;
+    text-align: center; transition: transform .15s;
 }
 .result-card:hover { transform: translateY(-2px); }
-.result-card .label {
-    font-size: .68rem;
-    color: #888;
-    font-weight: 600;
-    margin-bottom: .15rem;
-}
-.result-card .value {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--primary-dark);
-    font-variant-numeric: tabular-nums;
-}
+.result-card .label { font-size: .68rem; color: #888; font-weight: 600; margin-bottom: .15rem; }
+.result-card .value { font-size: 1rem; font-weight: 700; color: var(--primary-dark); font-variant-numeric: tabular-nums; }
 .result-card .value.accent { color: var(--primary); }
+.result-divider { height: 1px; background: #e8e8e8; margin: 1rem 0; }
 
-/* Divider */
-.result-divider {
-    height: 1px;
-    background: #e8e8e8;
-    margin: 1rem 0;
-}
-
-/* ===== LEGENDE ===== */
-.custom-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .75rem;
-    justify-content: center;
-    margin-bottom: .5rem;
-    font-size: .8rem;
-}
-.legend-item {
-    display: flex;
-    align-items: center;
-    gap: .3rem;
-}
-.legend-swatch {
-    width: 14px; height: 14px;
-    border-radius: 3px;
-    flex-shrink: 0;
-}
-.legend-line {
-    width: 20px; height: 3px;
-    border-radius: 2px;
-    flex-shrink: 0;
-}
-.legend-line.dashed {
-    background: repeating-linear-gradient(90deg, #555 0, #555 5px, transparent 5px, transparent 8px);
-}
-
-/* ===== FOOTER ===== */
-.footer {
-    text-align: center;
+/* ===== CHART (volle Breite darunter) ===== */
+.chart-section {
+    background: #fff;
+    border-radius: var(--radius);
     padding: 1.5rem;
-    font-size: .75rem;
-    color: #999;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
 }
+.chart-title { font-size: 1.05rem; font-weight: 700; color: var(--primary-dark); text-align: center; margin-bottom: .5rem; }
+.custom-legend { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; margin-bottom: .75rem; font-size: .8rem; }
+.legend-item { display: flex; align-items: center; gap: .3rem; }
+.legend-swatch { width: 16px; height: 16px; border-radius: 3px; flex-shrink: 0; }
+.legend-line { width: 22px; height: 3px; border-radius: 2px; flex-shrink: 0; }
+.legend-line.dashed { background: repeating-linear-gradient(90deg, #555 0, #555 5px, transparent 5px, transparent 8px); }
+.chart-wrap { position: relative; height: 420px; }
+.chart-wrap canvas { width: 100% !important; height: 100% !important; }
+
+.footer { text-align: center; padding: 1.5rem; font-size: .75rem; color: #999; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 820px) {
-    .main-grid { grid-template-columns: 1fr; }
-    .input-panel { position: static; }
-    .chart-wrap { min-height: 320px; }
+    .top-grid { grid-template-columns: 1fr; }
+    .chart-wrap { height: 320px; }
 }
-
 @media (max-width: 600px) {
     .header { padding: 1.25rem 1rem; }
     .container { padding: 1rem; }
     .result-grid { grid-template-columns: repeat(2, 1fr); }
-    .chart-wrap { min-height: 260px; }
+    .chart-wrap { height: 260px; }
     .value-input { width: 60px; font-size: .95rem; }
 }
 </style>
@@ -449,16 +205,13 @@ body {
 
 <div class="container">
 
-    <div class="main-grid">
+    <!-- OBERE ZEILE: Eingabe + Ergebnisse -->
+    <div class="top-grid">
 
-        <!-- EINGABE -->
+        <!-- EINGABE (links) -->
         <div class="input-panel">
-
-            <!-- Laufzeit -->
             <div class="input-group">
-                <div class="input-label">
-                    <span class="input-label-text">Laufzeit</span>
-                </div>
+                <div class="input-label"><span class="input-label-text">Laufzeit</span></div>
                 <div class="value-combo">
                     <div class="value-input-wrap">
                         <input type="number" class="value-input" id="inpLaufzeit" value="20" min="5" max="40" step="1">
@@ -468,11 +221,8 @@ body {
                 </div>
             </div>
 
-            <!-- Gesamtbeitrag -->
             <div class="input-group">
-                <div class="input-label">
-                    <span class="input-label-text">Gesamtbeitrag pro Monat</span>
-                </div>
+                <div class="input-label"><span class="input-label-text">Gesamtbeitrag pro Monat</span></div>
                 <div class="value-combo">
                     <div class="value-input-wrap">
                         <input type="number" class="value-input" id="inpGesamt" value="2000" min="50" max="10000" step="1" style="width:78px">
@@ -483,11 +233,8 @@ body {
                 <div class="input-hint">Gesamter monatlicher Vorsorgebeitrag</div>
             </div>
 
-            <!-- Fondsrendite -->
             <div class="input-group">
-                <div class="input-label">
-                    <span class="input-label-text">Fondsrendite p.a.</span>
-                </div>
+                <div class="input-label"><span class="input-label-text">Fondsrendite p.a.</span></div>
                 <div class="pill-group" id="renditePills">
                     <button class="pill" data-rendite="1.5">1,5 %</button>
                     <button class="pill" data-rendite="3">3 %</button>
@@ -496,17 +243,12 @@ body {
                 </div>
             </div>
 
-            <!-- Anlagemodell -->
             <div class="input-group">
-                <div class="input-label">
-                    <span class="input-label-text">Anlagemodell</span>
-                </div>
+                <div class="input-label"><span class="input-label-text">Anlagemodell</span></div>
                 <div class="toggle-group" id="modellToggle">
                     <button class="toggle-btn" data-modell="nur-ukasse">Nur Garantieprodukt (U-Kasse)</button>
                     <button class="toggle-btn active" data-modell="kombi">Kombi: Garantie + Fondsanlage</button>
                 </div>
-
-                <!-- DV-Beitrag (nur bei Kombi sichtbar) -->
                 <div class="subgroup" id="dvSubgroup">
                     <div class="subgroup-label">Davon in Fondsanlage ohne Garantie (DV)</div>
                     <div class="value-combo">
@@ -523,88 +265,57 @@ body {
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <!-- CHART -->
-        <div class="chart-panel">
-            <div class="chart-title" id="chartTitle">Kapitalentwicklung – Laufzeit 20 Jahre</div>
-            <div class="custom-legend" id="customLegend"></div>
-            <div class="chart-wrap">
-                <canvas id="mainChart"></canvas>
+        <!-- ERGEBNISSE (rechts) -->
+        <div class="result-section">
+            <div class="result-hero">
+                <div class="hero-label">Prognostiziertes Gesamtvermögen</div>
+                <div class="hero-value" id="resGesamt">–</div>
+                <div class="hero-sub" id="resHeroSub">–</div>
+            </div>
+
+            <div class="result-bar-section">
+                <div class="result-bar-title">Zusammensetzung des Vermögens</div>
+                <div class="result-bar-track">
+                    <div class="result-bar-seg garantie" id="barGarantie" style="width:40%"></div>
+                    <div class="result-bar-seg fonds" id="barFonds" style="width:35%"></div>
+                    <div class="result-bar-seg zusatz" id="barZusatz" style="width:25%"></div>
+                </div>
+                <div class="result-bar-labels">
+                    <span id="barLabelLeft">–</span>
+                    <span id="barLabelRight">–</span>
+                </div>
+            </div>
+
+            <div class="result-divider"></div>
+
+            <div class="result-grid">
+                <div class="result-card"><div class="label">Eingezahlte Beiträge</div><div class="value" id="resGesamtbeitraege">–</div></div>
+                <div class="result-card"><div class="label">Garantieziel (70 %)</div><div class="value" id="resGarantieziel">–</div></div>
+                <div class="result-card"><div class="label">Garantie-Trigger</div><div class="value accent" id="resTrigger">–</div></div>
+                <div class="result-card"><div class="label">Fondsvermögen</div><div class="value" id="resFonds">–</div></div>
+                <div class="result-card"><div class="label">Garantiesicherheit</div><div class="value" id="resGarantie">–</div></div>
+                <div class="result-card"><div class="label">Fondsquote am Ende</div><div class="value accent" id="resFondsquote">–</div></div>
+            </div>
+
+            <div class="result-divider"></div>
+
+            <div class="result-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="result-card"><div class="label">Monatliche Kosten (gesamt)</div><div class="value" id="resKosten">–</div></div>
+                <div class="result-card"><div class="label">Investierter Beitrag (gesamt)</div><div class="value" id="resInvest">–</div></div>
             </div>
         </div>
 
     </div>
 
-    <!-- ERGEBNIS-SEKTION -->
-    <div class="result-section">
-
-        <!-- Hero -->
-        <div class="result-hero">
-            <div class="hero-label">Prognostiziertes Gesamtvermögen</div>
-            <div class="hero-value" id="resGesamt">–</div>
-            <div class="hero-sub" id="resHeroSub">–</div>
+    <!-- CHART (volle Breite darunter) -->
+    <div class="chart-section">
+        <div class="chart-title" id="chartTitle">Kapitalentwicklung – Laufzeit 20 Jahre</div>
+        <div class="custom-legend" id="customLegend"></div>
+        <div class="chart-wrap">
+            <canvas id="mainChart"></canvas>
         </div>
-
-        <!-- Vermögensbalken -->
-        <div class="result-bar-section">
-            <div class="result-bar-title">Zusammensetzung des Vermögens</div>
-            <div class="result-bar-track" id="resBar">
-                <div class="result-bar-seg garantie" id="barGarantie" style="width:40%"></div>
-                <div class="result-bar-seg fonds" id="barFonds" style="width:35%"></div>
-                <div class="result-bar-seg zusatz" id="barZusatz" style="width:25%"></div>
-            </div>
-            <div class="result-bar-labels">
-                <span id="barLabelLeft">–</span>
-                <span id="barLabelRight">–</span>
-            </div>
-        </div>
-
-        <div class="result-divider"></div>
-
-        <!-- Kennzahlen -->
-        <div class="result-grid">
-            <div class="result-card">
-                <div class="label">Eingezahlte Beiträge</div>
-                <div class="value" id="resGesamtbeitraege">–</div>
-            </div>
-            <div class="result-card">
-                <div class="label">Garantieziel (70 %)</div>
-                <div class="value" id="resGarantieziel">–</div>
-            </div>
-            <div class="result-card">
-                <div class="label">Garantie-Trigger</div>
-                <div class="value accent" id="resTrigger">–</div>
-            </div>
-            <div class="result-card">
-                <div class="label">Fondsvermögen</div>
-                <div class="value" id="resFonds">–</div>
-            </div>
-            <div class="result-card">
-                <div class="label">Garantiesicherheit</div>
-                <div class="value" id="resGarantie">–</div>
-            </div>
-            <div class="result-card">
-                <div class="label">Fondsquote am Ende</div>
-                <div class="value accent" id="resFondsquote">–</div>
-            </div>
-        </div>
-
-        <div class="result-divider"></div>
-
-        <!-- Kosten -->
-        <div class="result-grid" style="grid-template-columns: 1fr 1fr;">
-            <div class="result-card">
-                <div class="label">Monatliche Kosten (gesamt)</div>
-                <div class="value" id="resKosten">–</div>
-            </div>
-            <div class="result-card">
-                <div class="label">Investierter Beitrag (gesamt)</div>
-                <div class="value" id="resInvest">–</div>
-            </div>
-        </div>
-
     </div>
 
 </div>
@@ -617,7 +328,6 @@ body {
 (function() {
     'use strict';
 
-    // ===== KONSTANTEN =====
     var GARANTIE_NIVEAU = 0.70;
     var GARANTIE_ZINS_PA = 0.01;
     var FONDS_TER_PA = 0.005;
@@ -625,7 +335,6 @@ body {
     var KOSTEN_FIX = 2.0;
     var DV_MAX = 676;
 
-    // ===== DOM =====
     var slLaufzeit = document.getElementById('slLaufzeit');
     var inpLaufzeit = document.getElementById('inpLaufzeit');
     var slGesamt = document.getElementById('slGesamt');
@@ -640,25 +349,16 @@ body {
     var selectedModell = 'kombi';
     var chart = null;
 
-    // ===== SLIDER/INPUT SYNC =====
     function syncSlider(slider, input, min, max, defaultVal) {
-        slider.addEventListener('input', function() {
-            input.value = this.value;
-            updateAll();
-        });
+        slider.addEventListener('input', function() { input.value = this.value; updateAll(); });
         input.addEventListener('input', function() {
             var raw = parseFloat(this.value);
-            if (!isNaN(raw) && raw >= min && raw <= max) {
-                slider.value = raw;
-                updateAll();
-            }
+            if (!isNaN(raw) && raw >= min && raw <= max) { slider.value = raw; updateAll(); }
         });
         input.addEventListener('blur', function() {
             var val = parseFloat(this.value) || defaultVal;
             val = Math.max(min, Math.min(max, Math.round(val)));
-            this.value = val;
-            slider.value = val;
-            updateAll();
+            this.value = val; slider.value = val; updateAll();
         });
     }
 
@@ -666,7 +366,6 @@ body {
     syncSlider(slGesamt, inpGesamt, 50, 10000, 2000);
     syncSlider(slDV, inpDV, 0, DV_MAX, DV_MAX);
 
-    // Rendite-Pills
     renditePills.querySelectorAll('.pill').forEach(function(pill) {
         pill.addEventListener('click', function() {
             renditePills.querySelectorAll('.pill').forEach(function(p) { p.classList.remove('active'); });
@@ -676,7 +375,6 @@ body {
         });
     });
 
-    // Modell-Toggle
     modellToggle.querySelectorAll('.toggle-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             modellToggle.querySelectorAll('.toggle-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -687,95 +385,58 @@ body {
         });
     });
 
-    // ===== EINGABEWERTE LESEN =====
     function getInputs() {
         var laufzeit = parseInt(inpLaufzeit.value) || 20;
         var gesamt = parseFloat(inpGesamt.value) || 2000;
         var dvBeitrag = 0;
-
         if (selectedModell === 'kombi') {
             dvBeitrag = parseFloat(inpDV.value) || 0;
-            dvBeitrag = Math.min(dvBeitrag, DV_MAX);
-            // DV darf nicht mehr als Gesamtbeitrag sein
-            dvBeitrag = Math.min(dvBeitrag, gesamt);
+            dvBeitrag = Math.min(dvBeitrag, DV_MAX, gesamt);
         }
-
         var ukBeitrag = gesamt - dvBeitrag;
-
-        // Split-Anzeige aktualisieren
         document.getElementById('splitUKasse').textContent = Math.round(ukBeitrag).toLocaleString('de-DE') + ' \u20AC';
         document.getElementById('splitDV').textContent = Math.round(dvBeitrag).toLocaleString('de-DE') + ' \u20AC';
-
-        return {
-            laufzeit: laufzeit,
-            gesamtBeitrag: gesamt,
-            ukBeitrag: ukBeitrag,
-            dvBeitrag: dvBeitrag,
-            isKombi: selectedModell === 'kombi' && dvBeitrag > 0
-        };
+        return { laufzeit: laufzeit, gesamtBeitrag: gesamt, ukBeitrag: ukBeitrag, dvBeitrag: dvBeitrag, isKombi: selectedModell === 'kombi' && dvBeitrag > 0 };
     }
 
     // ===== RECHENKERN =====
-
     function berechneGarantieTrigger(laufzeitMonate, beitragNetto, garantieziel) {
         var iMonat = GARANTIE_ZINS_PA / 12;
         for (var m = 1; m <= laufzeitMonate; m++) {
             var fv = beitragNetto * (Math.pow(1 + iMonat, m) - 1) / iMonat;
-            if (fv >= garantieziel) {
-                return laufzeitMonate - m;
-            }
+            if (fv >= garantieziel) return laufzeitMonate - m;
         }
         return 0;
     }
 
     function simuliere(inp) {
         var laufzeitMonate = inp.laufzeit * 12;
-
-        // === U-KASSE (Garantieprodukt) ===
         var ukBrutto = inp.ukBeitrag;
         var ukKosten = KOSTEN_PROZENT * ukBrutto + KOSTEN_FIX;
         var ukNetto = ukBrutto - ukKosten;
         var ukGesamtBeitraege = ukBrutto * laufzeitMonate;
         var garantieziel = GARANTIE_NIVEAU * ukGesamtBeitraege;
-
         var fondsRenditeMonat = (selectedRendite / 100 - FONDS_TER_PA) / 12;
         var garantieZinsMonat = GARANTIE_ZINS_PA / 12;
-
         var trigger = berechneGarantieTrigger(laufzeitMonate, ukNetto, garantieziel);
 
-        // === DV (Fondsanlage ohne Garantie) ===
         var dvBrutto = inp.dvBeitrag;
         var dvKosten = dvBrutto > 0 ? (KOSTEN_PROZENT * dvBrutto + KOSTEN_FIX) : 0;
         var dvNetto = dvBrutto - dvKosten;
 
-        // === Simulation ===
-        var fondVermoegen = 0;
-        var garantieSicherheit = 0;
-        var dvFonds = 0;
-
-        // Startpunkt Jahr 0
-        var labels = [0];
-        var arrGarantie = [0];
-        var arrFonds = [0];
-        var arrDV = [0];
-        var arrBeitraege = [0];
+        var fondVermoegen = 0, garantieSicherheit = 0, dvFonds = 0;
+        var labels = [0], arrGarantie = [0], arrFonds = [0], arrDV = [0], arrBeitraege = [0];
         var fondsQuoten = {};
 
         for (var monat = 1; monat <= laufzeitMonate; monat++) {
-            // U-Kasse: Garantieprodukt
             if (monat <= trigger) {
                 fondVermoegen = (fondVermoegen + ukNetto) * (1 + fondsRenditeMonat);
             } else {
                 fondVermoegen = fondVermoegen * (1 + fondsRenditeMonat);
                 garantieSicherheit = (garantieSicherheit + ukNetto) * (1 + garantieZinsMonat);
             }
+            if (dvNetto > 0) dvFonds = (dvFonds + dvNetto) * (1 + fondsRenditeMonat);
 
-            // DV: Reine Fondsanlage (immer in Fonds, keine Garantie)
-            if (dvNetto > 0) {
-                dvFonds = (dvFonds + dvNetto) * (1 + fondsRenditeMonat);
-            }
-
-            // Jährliche Werte
             if (monat % 12 === 0) {
                 var jahr = monat / 12;
                 labels.push(jahr);
@@ -783,8 +444,6 @@ body {
                 arrFonds.push(Math.round(fondVermoegen * 100) / 100);
                 arrDV.push(Math.round(dvFonds * 100) / 100);
                 arrBeitraege.push(inp.gesamtBeitrag * monat);
-
-                // Fondsquote alle 5 Jahre (bezogen auf U-Kasse)
                 var ukGesamt = fondVermoegen + garantieSicherheit;
                 if (ukGesamt > 0 && jahr % 5 === 0) {
                     fondsQuoten[jahr] = Math.round((fondVermoegen / ukGesamt) * 100);
@@ -792,133 +451,107 @@ body {
             }
         }
 
-        var ukEndGesamt = fondVermoegen + garantieSicherheit;
-        var gesamtEnd = ukEndGesamt + dvFonds;
-
         return {
-            laufzeitMonate: laufzeitMonate,
-            // U-Kasse
-            ukGesamtBeitraege: ukGesamtBeitraege,
-            garantieziel: garantieziel,
-            triggerMonat: trigger,
+            laufzeitMonate: laufzeitMonate, ukGesamtBeitraege: ukGesamtBeitraege,
+            garantieziel: garantieziel, triggerMonat: trigger,
             triggerJahr: Math.round(trigger / 12 * 10) / 10,
-            fondVermoegen: fondVermoegen,
-            garantieSicherheit: garantieSicherheit,
-            ukEndGesamt: ukEndGesamt,
-            ukKosten: ukKosten,
-            ukNetto: ukNetto,
-            // DV
-            dvFonds: dvFonds,
-            dvKosten: dvKosten,
-            dvNetto: dvNetto,
+            fondVermoegen: fondVermoegen, garantieSicherheit: garantieSicherheit,
+            ukEndGesamt: fondVermoegen + garantieSicherheit,
+            ukKosten: ukKosten, ukNetto: ukNetto,
+            dvFonds: dvFonds, dvKosten: dvKosten, dvNetto: dvNetto,
             dvGesamtBeitraege: dvBrutto * laufzeitMonate,
-            // Gesamt
             gesamtBeitraege: inp.gesamtBeitrag * laufzeitMonate,
-            gesamtEnd: gesamtEnd,
-            gesamtKosten: ukKosten + dvKosten,
-            gesamtNetto: ukNetto + dvNetto,
-            // Chart-Daten
-            labels: labels,
-            arrGarantie: arrGarantie,
-            arrFonds: arrFonds,
-            arrDV: arrDV,
-            arrBeitraege: arrBeitraege,
-            fondsQuoten: fondsQuoten,
+            gesamtEnd: fondVermoegen + garantieSicherheit + dvFonds,
+            gesamtKosten: ukKosten + dvKosten, gesamtNetto: ukNetto + dvNetto,
+            labels: labels, arrGarantie: arrGarantie, arrFonds: arrFonds,
+            arrDV: arrDV, arrBeitraege: arrBeitraege, fondsQuoten: fondsQuoten,
             isKombi: inp.isKombi
         };
     }
 
-    // ===== FORMATIERUNG =====
-    function fmtEuro(val) {
-        return Math.round(val).toLocaleString('de-DE') + ' \u20AC';
-    }
+    function fmtEuro(val) { return Math.round(val).toLocaleString('de-DE') + ' \u20AC'; }
 
     // ===== LEGENDE =====
-    function buildLegend(isKombi) {
-        var container = document.getElementById('customLegend');
+    function buildLegend(isKombi, dvLabel) {
+        var c = document.getElementById('customLegend');
         var items = [
-            { type: 'swatch', color: 'var(--c-garantie)', label: 'Garantiesicherheit' },
-            { type: 'swatch', color: 'var(--c-fonds)', label: isKombi ? 'Fonds Garantieprodukt' : 'Fondsverm\u00F6gen' }
+            { t: 's', color: 'var(--c-garantie)', l: 'Garantiesicherheit' },
+            { t: 's', color: 'var(--c-fonds)', l: isKombi ? 'Fonds Garantieprodukt' : 'Fondverm\u00F6gen' }
         ];
-        if (isKombi) {
-            items.push({ type: 'swatch', color: 'var(--c-zusatz)', label: 'Fondsanlage DV' });
-        }
-        items.push({ type: 'line', color: '#222', label: 'Gesamtverm\u00F6gen', dashed: false });
-        items.push({ type: 'line', color: '#888', label: 'Eingezahlte Beitr\u00E4ge', dashed: true });
-
-        container.innerHTML = '';
+        if (isKombi) items.push({ t: 's', color: 'var(--c-zusatz)', l: 'Zusatzfonds ' + dvLabel + ' \u20AC' });
+        items.push({ t: 'l', color: '#000', l: 'Gesamtverm\u00F6gen', d: false });
+        items.push({ t: 'l', color: '#888', l: 'Eingezahlte Beitr\u00E4ge', d: true });
+        c.innerHTML = '';
         items.forEach(function(it) {
             var el = document.createElement('span');
             el.className = 'legend-item';
-            if (it.type === 'swatch') {
-                el.innerHTML = '<span class="legend-swatch" style="background:' + it.color + '"></span>' + it.label;
+            if (it.t === 's') {
+                el.innerHTML = '<span class="legend-swatch" style="background:' + it.color + '"></span>' + it.l;
             } else {
-                var cls = it.dashed ? 'legend-line dashed' : 'legend-line';
-                var bg = it.dashed ? '' : 'background:' + it.color;
-                el.innerHTML = '<span class="' + cls + '" style="' + bg + '"></span>' + it.label;
+                el.innerHTML = '<span class="legend-line' + (it.d ? ' dashed' : '') + '" style="' + (it.d ? '' : 'background:' + it.color) + '"></span>' + it.l;
             }
-            container.appendChild(el);
+            c.appendChild(el);
         });
     }
 
     // ===== CHART =====
     function updateChart(data, inp) {
         var laufzeit = inp.laufzeit;
-        var dvBeitragLabel = Math.round(inp.dvBeitrag);
+        var dvLabel = Math.round(inp.dvBeitrag);
 
-        // Titel (wie Nanno)
         var titleEl = document.getElementById('chartTitle');
-        if (data.isKombi) {
-            titleEl.textContent = 'Kapitalentwicklung mit Zusatzfonds (' + dvBeitragLabel + ' \u20AC) \u2013 Laufzeit ' + laufzeit + ' Jahre';
-        } else {
-            titleEl.textContent = 'Kapitalentwicklung mit 70 % Beitragsgarantie (Worst-Case-Garantie-Trigger)';
-        }
+        titleEl.textContent = data.isKombi
+            ? 'Kapitalentwicklung mit Zusatzfonds (' + dvLabel + ' \u20AC) \u2013 Laufzeit ' + laufzeit + ' Jahre'
+            : 'Kapitalentwicklung mit 70 % Beitragsgarantie (Worst-Case-Garantie-Trigger)';
 
-        buildLegend(data.isKombi);
+        buildLegend(data.isKombi, dvLabel);
 
-        // Kumulierte Daten (echtes Stacking: unten nach oben)
+        // Kumulierte Stacks
         var stackGarantie = data.arrGarantie.slice();
         var stackFonds = data.arrGarantie.map(function(g, i) { return g + data.arrFonds[i]; });
         var stackDV = stackFonds.map(function(gf, i) { return gf + data.arrDV[i]; });
         var gesamtData = data.isKombi ? stackDV.slice() : stackFonds.slice();
 
-        // === DATASETS ===
+        // Datasets – WICHTIG: Zeichenreihenfolge!
+        // Höchste Fläche zuerst (wird zuerst gemalt = hinten),
+        // dann kleinere darüber (verdecken unteren Teil).
+        // In Chart.js: höherer order = zuerst gezeichnet = weiter hinten.
         var datasets = [];
 
         if (data.isKombi) {
-            // Zusatzfonds DV (oben) – hellblau
+            // 1. Zusatzfonds (größte Fläche, HINTEN = order 10)
             datasets.push({
-                label: 'Zusatzfonds ' + dvBeitragLabel + ' \u20AC',
+                label: 'Zusatzfonds ' + dvLabel + ' \u20AC',
                 data: stackDV,
                 backgroundColor: '#6BAED6',
-                borderColor: '#5A9EC5',
+                borderColor: '#6BAED6',
                 borderWidth: 0,
                 fill: 'origin',
                 pointRadius: 0,
                 tension: 0.35,
-                order: 4
+                order: 10
             });
         }
 
-        // Fonds Garantieprodukt (Mitte) – mittelblau
+        // 2. Fonds (mittlere Fläche, MITTE = order 8)
         datasets.push({
             label: data.isKombi ? 'Fonds Garantieprodukt' : 'Fondverm\u00F6gen',
             data: stackFonds,
             backgroundColor: '#2171B5',
-            borderColor: '#1C65A5',
+            borderColor: '#2171B5',
             borderWidth: 0,
             fill: 'origin',
             pointRadius: 0,
             tension: 0.35,
-            order: 5
+            order: 8
         });
 
-        // Garantiesicherheit (unten) – dunkelblau
+        // 3. Garantiesicherheit (kleinste Fläche, VORNE = order 6)
         datasets.push({
             label: 'Garantiesicherheit',
             data: stackGarantie,
             backgroundColor: '#08306B',
-            borderColor: '#062854',
+            borderColor: '#08306B',
             borderWidth: 0,
             fill: 'origin',
             pointRadius: 0,
@@ -926,105 +559,79 @@ body {
             order: 6
         });
 
-        // Gesamtvermögen – schwarze Linie
+        // 4. Gesamtvermögen Linie (ganz vorne = order 2)
         datasets.push({
             label: 'Gesamtverm\u00F6gen',
             data: gesamtData,
             borderColor: '#000',
-            borderWidth: 2,
+            borderWidth: 2.5,
             fill: false,
             pointRadius: 0,
             tension: 0.35,
-            order: 1
+            order: 2
         });
 
-        // Eingezahlte Beiträge – weiß gestrichelt
+        // 5. Eingezahlte Beiträge (gestrichelt = order 3)
         datasets.push({
             label: 'Eingezahlte Beitr\u00E4ge',
             data: data.arrBeitraege,
-            borderColor: 'rgba(255,255,255,0.8)',
+            borderColor: 'rgba(255,255,255,0.85)',
             borderWidth: 2,
             borderDash: [8, 4],
             fill: false,
             pointRadius: 0,
             tension: 0,
-            order: 2
+            order: 3
         });
 
-        // === ANNOTATIONS ===
+        // Annotations
         var annotations = {};
 
-        // Garantieziel – horizontale Linie
-        annotations.garantiezielLine = {
-            type: 'line',
-            yMin: data.garantieziel,
-            yMax: data.garantieziel,
-            borderColor: 'rgba(255,255,255,0.5)',
-            borderWidth: 1.5,
-            borderDash: [5, 3]
+        // Garantieziel
+        annotations.gzLine = {
+            type: 'line', yMin: data.garantieziel, yMax: data.garantieziel,
+            borderColor: 'rgba(255,255,255,0.5)', borderWidth: 1.5, borderDash: [5, 3]
         };
-        annotations.garantiezielLabel = {
-            type: 'label',
-            xValue: 0.5,
-            yValue: data.garantieziel,
-            content: 'Garantieziel',
-            color: '#08306B',
-            font: { size: 11, weight: 'bold' },
-            position: 'start',
-            xAdjust: 5,
-            yAdjust: -12
+        annotations.gzLabel = {
+            type: 'label', xValue: 0.5, yValue: data.garantieziel,
+            content: 'Garantieziel', color: '#08306B',
+            font: { size: 11, weight: 'bold' }, xAdjust: 5, yAdjust: -12
         };
 
-        // Garantie-Trigger – vertikale Linie
+        // Garantie-Trigger
         var triggerJahr = data.triggerMonat / 12;
         if (triggerJahr > 0 && triggerJahr < laufzeit) {
-            annotations.triggerLine = {
-                type: 'line',
-                xMin: triggerJahr,
-                xMax: triggerJahr,
-                borderColor: 'rgba(8,48,107,0.5)',
-                borderWidth: 2
+            annotations.trLine = {
+                type: 'line', xMin: triggerJahr, xMax: triggerJahr,
+                borderColor: 'rgba(8,48,107,0.5)', borderWidth: 2
             };
-            annotations.triggerLabel = {
-                type: 'label',
-                xValue: triggerJahr,
-                yValue: 0,
-                content: 'Garantie-Trigger',
-                color: '#08306B',
-                font: { size: 11, weight: 'bold' },
-                yAdjust: 15
+            annotations.trLabel = {
+                type: 'label', xValue: triggerJahr, yValue: 0,
+                content: 'Garantie-Trigger', color: '#08306B',
+                font: { size: 11, weight: 'bold' }, yAdjust: 15
             };
-
-            // "Garantiesicherung" rechts vom Trigger (oben)
             annotations.phaseRight = {
                 type: 'label',
                 xValue: triggerJahr + (laufzeit - triggerJahr) / 2,
-                yValue: gesamtData[gesamtData.length - 1] * 0.93,
+                yValue: gesamtData[gesamtData.length - 1] * 0.92,
                 content: 'Garantiesicherung',
                 color: 'rgba(255,255,255,0.55)',
-                font: { size: 15, weight: 'bold' },
-                padding: 0
+                font: { size: 15, weight: 'bold' }
             };
         }
 
-        // Fondsquoten entlang der Gesamtvermögen-Kurve
+        // Fondsquoten
         Object.keys(data.fondsQuoten).forEach(function(jahr) {
             var idx = parseInt(jahr);
             if (idx >= 0 && idx < gesamtData.length) {
-                annotations['fq_' + jahr] = {
-                    type: 'label',
-                    xValue: parseInt(jahr),
-                    yValue: gesamtData[idx],
+                annotations['fq' + jahr] = {
+                    type: 'label', xValue: parseInt(jahr), yValue: gesamtData[idx],
                     content: data.fondsQuoten[jahr] + ' % Fonds',
-                    color: '#333',
-                    font: { size: 10, weight: '600' },
-                    yAdjust: -16,
-                    padding: 0
+                    color: '#333', font: { size: 10, weight: '600' }, yAdjust: -16
                 };
             }
         });
 
-        // === CONFIG ===
         var config = {
             type: 'line',
             data: { labels: data.labels, datasets: datasets },
@@ -1035,35 +642,19 @@ body {
                 layout: { padding: { top: 10, right: 15 } },
                 scales: {
                     x: {
-                        type: 'linear',
-                        min: 0,
-                        max: laufzeit,
-                        title: {
-                            display: true,
-                            text: 'Laufzeit (Jahre)',
-                            font: { size: 12, weight: '600' },
-                            color: '#555'
-                        },
-                        ticks: {
-                            color: '#666',
-                            stepSize: 5,
-                            callback: function(val) { return val; }
-                        },
+                        type: 'linear', min: 0, max: laufzeit,
+                        title: { display: true, text: 'Laufzeit (Jahre)', font: { size: 12, weight: '600' }, color: '#555' },
+                        ticks: { color: '#666', stepSize: 5 },
                         grid: { color: 'rgba(0,0,0,.08)' }
                     },
                     y: {
-                        title: {
-                            display: true,
-                            text: 'Kapital (\u20AC)',
-                            font: { size: 12, weight: '600' },
-                            color: '#555'
-                        },
+                        title: { display: true, text: 'Kapital (\u20AC)', font: { size: 12, weight: '600' }, color: '#555' },
                         ticks: {
                             color: '#666',
-                            callback: function(val) {
-                                if (val >= 1000000) return (val / 1000000).toLocaleString('de-DE') + ' Mio.';
-                                if (val >= 1000) return val.toLocaleString('de-DE');
-                                return val;
+                            callback: function(v) {
+                                if (v >= 1000000) return (v / 1000000).toLocaleString('de-DE') + ' Mio.';
+                                if (v >= 1000) return v.toLocaleString('de-DE');
+                                return v;
                             }
                         },
                         grid: { color: 'rgba(0,0,0,.08)' },
@@ -1074,16 +665,12 @@ body {
                     legend: { display: false },
                     tooltip: {
                         backgroundColor: 'rgba(8,48,107,0.95)',
-                        titleFont: { weight: '600' },
-                        bodyFont: { size: 12 },
-                        padding: 10,
-                        cornerRadius: 6,
+                        titleFont: { weight: '600' }, bodyFont: { size: 12 },
+                        padding: 10, cornerRadius: 6,
                         callbacks: {
                             title: function(items) { return 'Jahr ' + items[0].label; },
                             label: function(ctx) {
-                                var ds = ctx.dataset.label;
-                                var idx = ctx.dataIndex;
-                                var val;
+                                var ds = ctx.dataset.label, idx = ctx.dataIndex, val;
                                 if (ds === 'Garantiesicherheit') val = data.arrGarantie[idx];
                                 else if (ds === 'Fonds Garantieprodukt' || ds === 'Fondverm\u00F6gen') val = data.arrFonds[idx];
                                 else if (ds.indexOf('Zusatzfonds') === 0) val = data.arrDV[idx];
@@ -1104,59 +691,41 @@ body {
     // ===== ERGEBNIS-SEKTION =====
     function updateResults(data, inp) {
         var fondsEnd = data.fondVermoegen + data.dvFonds;
-        var fondsquoteEnd = data.gesamtEnd > 0 ? Math.round(fondsEnd / data.gesamtEnd * 100) : 0;
+        var fqEnd = data.gesamtEnd > 0 ? Math.round(fondsEnd / data.gesamtEnd * 100) : 0;
 
-        // Hero
         document.getElementById('resGesamt').textContent = fmtEuro(data.gesamtEnd);
-        var heroSub = 'bei ' + fmtEuro(inp.gesamtBeitrag) + ' mtl.';
-        if (data.isKombi) {
-            heroSub += ' (' + fmtEuro(inp.ukBeitrag) + ' U-Kasse + ' + fmtEuro(inp.dvBeitrag) + ' DV)';
-        }
-        heroSub += ' \u00B7 ' + inp.laufzeit + ' Jahre \u00B7 ' + selectedRendite.toLocaleString('de-DE') + ' % Rendite';
-        document.getElementById('resHeroSub').textContent = heroSub;
+        var sub = 'bei ' + fmtEuro(inp.gesamtBeitrag) + ' mtl.';
+        if (data.isKombi) sub += ' (' + fmtEuro(inp.ukBeitrag) + ' U-Kasse + ' + fmtEuro(inp.dvBeitrag) + ' DV)';
+        sub += ' \u00B7 ' + inp.laufzeit + ' J. \u00B7 ' + selectedRendite.toLocaleString('de-DE') + ' %';
+        document.getElementById('resHeroSub').textContent = sub;
 
-        // Vermögensbalken
-        var barGarantie = document.getElementById('barGarantie');
-        var barFonds = document.getElementById('barFonds');
-        var barZusatz = document.getElementById('barZusatz');
-
+        var bG = document.getElementById('barGarantie');
+        var bF = document.getElementById('barFonds');
+        var bZ = document.getElementById('barZusatz');
         if (data.gesamtEnd > 0) {
-            var pctGarantie = data.garantieSicherheit / data.gesamtEnd * 100;
-            var pctFonds = data.fondVermoegen / data.gesamtEnd * 100;
-            var pctDV = data.isKombi ? data.dvFonds / data.gesamtEnd * 100 : 0;
-
-            barGarantie.style.width = pctGarantie + '%';
-            barGarantie.textContent = pctGarantie >= 8 ? Math.round(pctGarantie) + ' %' : '';
-
-            barFonds.style.width = pctFonds + '%';
-            barFonds.textContent = pctFonds >= 8 ? Math.round(pctFonds) + ' %' : '';
-
-            barZusatz.style.display = data.isKombi ? '' : 'none';
-            barZusatz.style.width = pctDV + '%';
-            barZusatz.textContent = pctDV >= 8 ? Math.round(pctDV) + ' %' : '';
+            var pG = data.garantieSicherheit / data.gesamtEnd * 100;
+            var pF = data.fondVermoegen / data.gesamtEnd * 100;
+            var pD = data.isKombi ? data.dvFonds / data.gesamtEnd * 100 : 0;
+            bG.style.width = pG + '%'; bG.textContent = pG >= 8 ? Math.round(pG) + ' %' : '';
+            bF.style.width = pF + '%'; bF.textContent = pF >= 8 ? Math.round(pF) + ' %' : '';
+            bZ.style.display = data.isKombi ? '' : 'none';
+            bZ.style.width = pD + '%'; bZ.textContent = pD >= 8 ? Math.round(pD) + ' %' : '';
         }
+        document.getElementById('barLabelLeft').textContent = 'Garantiesicherheit: ' + fmtEuro(data.garantieSicherheit);
+        document.getElementById('barLabelRight').textContent = data.isKombi
+            ? 'Fonds U-K: ' + fmtEuro(data.fondVermoegen) + ' + DV: ' + fmtEuro(data.dvFonds)
+            : 'Fondsverm\u00F6gen: ' + fmtEuro(data.fondVermoegen);
 
-        var barLabelLeft = document.getElementById('barLabelLeft');
-        var barLabelRight = document.getElementById('barLabelRight');
-        barLabelLeft.textContent = 'Garantiesicherheit: ' + fmtEuro(data.garantieSicherheit);
-        if (data.isKombi) {
-            barLabelRight.textContent = 'Fonds U-K: ' + fmtEuro(data.fondVermoegen) + ' + DV: ' + fmtEuro(data.dvFonds);
-        } else {
-            barLabelRight.textContent = 'Fondsverm\u00F6gen: ' + fmtEuro(data.fondVermoegen);
-        }
-
-        // Kennzahlen
         document.getElementById('resGesamtbeitraege').textContent = fmtEuro(data.gesamtBeitraege);
         document.getElementById('resGarantieziel').textContent = fmtEuro(data.garantieziel);
         document.getElementById('resTrigger').textContent = 'Jahr ' + data.triggerJahr;
         document.getElementById('resFonds').textContent = fmtEuro(fondsEnd);
         document.getElementById('resGarantie').textContent = fmtEuro(data.garantieSicherheit);
-        document.getElementById('resFondsquote').textContent = fondsquoteEnd + ' %';
+        document.getElementById('resFondsquote').textContent = fqEnd + ' %';
         document.getElementById('resKosten').textContent = fmtEuro(data.gesamtKosten);
         document.getElementById('resInvest').textContent = fmtEuro(data.gesamtNetto);
     }
 
-    // ===== HAUPT-UPDATE =====
     function updateAll() {
         var inp = getInputs();
         var data = simuliere(inp);
@@ -1164,9 +733,7 @@ body {
         updateResults(data, inp);
     }
 
-    // Initial
     updateAll();
-
 })();
 </script>
 
