@@ -264,6 +264,8 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
                 <div class="result-card"><div class="label">Garantie-Trigger</div><div class="value accent" id="resTrigger">–</div></div>
                 <div class="result-card"><div class="label">Fondsvermögen gesamt</div><div class="value" id="resFonds">–</div></div>
                 <div class="result-card"><div class="label">Fondsquote am Ende</div><div class="value accent" id="resFondsquote">–</div></div>
+                <div class="result-card"><div class="label">Ø Fondsquote (zeitgew.)</div><div class="value accent" id="resFqZeit">–</div></div>
+                <div class="result-card"><div class="label">Ø Fondsquote (vermögensgew.)</div><div class="value accent" id="resFqVerm">–</div></div>
                 <div class="result-card"><div class="label">Wertzuwachs</div><div class="value accent" id="resZuwachs">–</div></div>
             </div>
 
@@ -321,6 +323,16 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
             <div class="faq-body">
                 Die Fondsquote zeigt, <strong>welcher Anteil Ihres Vermögens in Fonds investiert ist</strong>. Zu Beginn der Laufzeit liegt die Quote bei 100 % – Ihr gesamtes Kapital arbeitet im Fonds. Nach dem Garantie-Trigger sinkt die Quote, da neue Beiträge ins Sicherungsvermögen fließen.<br><br>
                 Eine höhere Fondsquote bedeutet mehr Renditechancen, aber auch mehr Schwankungsrisiko. Die Garantie stellt sicher, dass Sie mindestens 70 % Ihrer Beiträge zurückerhalten.
+            </div>
+        </details>
+
+        <details class="faq-item">
+            <summary>Was bedeuten die durchschnittlichen Fondsquoten?</summary>
+            <div class="faq-body">
+                Die beiden Durchschnittswerte zeigen, wie stark Ihr Vermögen über die gesamte Laufzeit in Investmentfonds investiert war:<br><br>
+                <strong>Zeitgewichtete Fondsquote (Ø zeitgew.):</strong> Der einfache Durchschnitt der monatlichen Fondsquoten. Jeder Monat zählt gleich viel – egal ob das Vermögen zu Beginn noch klein oder am Ende bereits groß ist. Dieser Wert zeigt, wie viel Zeit Ihr Kapital im Durchschnitt im Fonds investiert war.<br><br>
+                <strong>Vermögensgewichtete Fondsquote (Ø vermögensgew.):</strong> Hier werden Monate mit höherem Vermögen stärker gewichtet. Da das Vermögen gegen Ende der Laufzeit am größten ist und gleichzeitig die Fondsquote nach dem Garantie-Trigger sinkt, liegt dieser Wert typischerweise unter der zeitgewichteten Quote. Er beantwortet die Frage: <em>„Wie viel meines Kapitals war im Durchschnitt tatsächlich in Fonds investiert?"</em><br><br>
+                <strong>Beispiel:</strong> Eine zeitgewichtete Quote von 80 % und eine vermögensgewichtete Quote von 65 % bedeutet: Über die Laufzeit war Ihr Geld 80 % der Zeit im Fonds angelegt, aber bezogen auf das tatsächliche Kapital waren durchschnittlich 65 % in Fonds investiert.
             </div>
         </details>
 
@@ -410,11 +422,19 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
         var dvB = inp.dvBeitrag, dvK = dvB > 0 ? KOSTEN_PROZENT * dvB + KOSTEN_FIX : 0, dvN = dvB - dvK;
         var fV = 0, gS = 0, dvF = 0;
         var labels = [0], aG = [0], aF = [0], aDV = [0], aB = [0], fQ = {};
+        var sumFQ = 0, sumFQxV = 0, sumV = 0;
 
         for (var m = 1; m <= lzM; m++) {
             if (m <= trigger) { fV = (fV + ukN) * (1 + fRM); }
             else { fV = fV * (1 + fRM); gS = (gS + ukN) * (1 + gZM); }
             if (dvN > 0) dvF = (dvF + dvN) * (1 + fRM);
+            // Fondsquoten-Durchschnitte (monatlich)
+            var mGes = fV + gS + dvF;
+            var mFonds = fV + dvF;
+            var mFQ = mGes > 0 ? mFonds / mGes : 0;
+            sumFQ += mFQ;
+            sumFQxV += mFQ * mGes;
+            sumV += mGes;
             if (m % 12 === 0) {
                 var j = m / 12; labels.push(j);
                 aG.push(Math.round(gS * 100) / 100); aF.push(Math.round(fV * 100) / 100);
@@ -423,12 +443,15 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
                 if (ukT > 0 && (j % 5 === 0 || m === lzM)) fQ[j] = Math.round(fV / ukT * 100);
             }
         }
+        var fqZeit = lzM > 0 ? Math.round(sumFQ / lzM * 100) : 0;
+        var fqVerm = sumV > 0 ? Math.round(sumFQxV / sumV * 100) : 0;
         var gE = fV + gS + dvF;
         return {
             lzM: lzM, ukGB: ukGB, gz: gz, triggerM: trigger, triggerJ: Math.round(trigger / 12 * 10) / 10,
             fV: fV, gS: gS, ukEnd: fV + gS, ukK: ukK, ukN: ukN,
             dvF: dvF, dvK: dvK, dvN: dvN, dvGB: dvB * lzM,
             gesB: inp.gesamtBeitrag * lzM, gE: gE, gesK: ukK + dvK, gesN: ukN + dvN,
+            fqZeit: fqZeit, fqVerm: fqVerm,
             labels: labels, aG: aG, aF: aF, aDV: aDV, aB: aB, fQ: fQ, isK: inp.isKombi
         };
     }
@@ -606,6 +629,8 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
         document.getElementById('resTrigger').textContent = 'Jahr ' + d.triggerJ;
         document.getElementById('resFonds').textContent = fE(fEnd);
         document.getElementById('resFondsquote').textContent = fqEnd + ' %';
+        document.getElementById('resFqZeit').textContent = d.fqZeit + ' %';
+        document.getElementById('resFqVerm').textContent = d.fqVerm + ' %';
         document.getElementById('resZuwachs').textContent = '+ ' + fE(zuwachs);
         document.getElementById('resBeitragMtl').textContent = fE(inp.gesamtBeitrag);
         document.getElementById('resKosten').textContent = fE(d.gesK);
