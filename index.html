@@ -84,11 +84,16 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
 .bar-label-item .bl-val { font-weight: 700; color: var(--primary-dark); }
 
 .result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem; }
+.result-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+.result-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
 .result-card { background: var(--bg); border-radius: 6px; padding: .65rem .75rem; text-align: center; transition: transform .15s; }
 .result-card:hover { transform: translateY(-2px); }
 .result-card .label { font-size: .68rem; color: #888; font-weight: 600; margin-bottom: .15rem; }
 .result-card .value { font-size: 1rem; font-weight: 700; color: var(--primary-dark); font-variant-numeric: tabular-nums; }
 .result-card .value.accent { color: var(--primary); }
+.result-card.highlight { background: #1a5a96; }
+.result-card.highlight .label { color: rgba(255,255,255,0.75); }
+.result-card.highlight .value { color: #fff; }
 .result-divider { height: 1px; background: #e8e8e8; margin: 1rem 0; }
 
 /* CHART */
@@ -122,7 +127,7 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
 .print-btn:hover { background: var(--primary-dark); }
 
 @media (max-width: 820px) { .top-grid { grid-template-columns: 1fr; } .chart-wrap { height: 320px; } }
-@media (max-width: 600px) { .header { padding: 1.25rem 1rem; } .container { padding: 1rem; } .result-grid { grid-template-columns: repeat(2, 1fr); } .chart-wrap { height: 260px; } .value-input { width: 60px; font-size: .95rem; } }
+@media (max-width: 600px) { .header { padding: 1.25rem 1rem; } .container { padding: 1rem; } .result-grid { grid-template-columns: repeat(2, 1fr); } .result-grid.cols-5, .result-grid.cols-4 { grid-template-columns: repeat(2, 1fr); } .chart-wrap { height: 260px; } .value-input { width: 60px; font-size: .95rem; } }
 /* ===== DRUCKVERSION (2 Seiten) ===== */
 @media print {
     @page { size: A4 landscape; margin: 12mm; }
@@ -145,6 +150,11 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
     .result-card { padding: .4rem .5rem; }
     .result-card .label { font-size: .6rem; }
     .result-card .value { font-size: .85rem; }
+    .result-card.highlight { background: #1a5a96 !important; }
+    .result-card.highlight .label { color: rgba(255,255,255,0.75) !important; }
+    .result-card.highlight .value { color: #fff !important; }
+    .result-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+    .result-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
 
     /* Seite 2: Chart + FAQ */
     .chart-section { box-shadow: none; border: 1px solid #ddd; padding: 1rem; margin-bottom: .75rem; page-break-inside: avoid; break-inside: avoid; }
@@ -259,22 +269,28 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
             <div class="result-divider"></div>
 
             <div class="result-grid">
+                <div class="result-card highlight"><div class="label">Fondsquote am Ende</div><div class="value" id="resFondsquote">–</div></div>
+                <div class="result-card highlight"><div class="label">Ø Fondsquote (vermögensgew.)</div><div class="value" id="resFqVerm">–</div></div>
+                <div class="result-card highlight"><div class="label">Ø Fondsquote (zeitgew.)</div><div class="value" id="resFqZeit">–</div></div>
+            </div>
+
+            <div class="result-divider"></div>
+
+            <div class="result-grid cols-5">
                 <div class="result-card"><div class="label">Eingezahlte Beiträge</div><div class="value" id="resGesamtbeitraege">–</div></div>
-                <div class="result-card"><div class="label">Garantieanteil (70 %)</div><div class="value" id="resGarantie">–</div></div>
-                <div class="result-card"><div class="label">Garantie-Trigger</div><div class="value accent" id="resTrigger">–</div></div>
+                <div class="result-card"><div class="label">Gesamtvermögen</div><div class="value" id="resGesamtvermoegen">–</div></div>
                 <div class="result-card"><div class="label">Fondsvermögen gesamt</div><div class="value" id="resFonds">–</div></div>
-                <div class="result-card"><div class="label">Fondsquote am Ende</div><div class="value accent" id="resFondsquote">–</div></div>
-                <div class="result-card"><div class="label">Ø Fondsquote (zeitgew.)</div><div class="value accent" id="resFqZeit">–</div></div>
-                <div class="result-card"><div class="label">Ø Fondsquote (vermögensgew.)</div><div class="value accent" id="resFqVerm">–</div></div>
+                <div class="result-card"><div class="label">Garantieanteil (70 %)</div><div class="value" id="resGarantie">–</div></div>
                 <div class="result-card"><div class="label">Wertzuwachs</div><div class="value accent" id="resZuwachs">–</div></div>
             </div>
 
             <div class="result-divider"></div>
 
-            <div class="result-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div class="result-grid cols-4">
                 <div class="result-card"><div class="label">Gesamtbeitrag pro Monat</div><div class="value" id="resBeitragMtl">–</div></div>
                 <div class="result-card"><div class="label">Kosten pro Monat</div><div class="value" id="resKosten">–</div></div>
                 <div class="result-card"><div class="label">Investiert pro Monat</div><div class="value" id="resInvest">–</div></div>
+                <div class="result-card"><div class="label">Garantie-Trigger</div><div class="value accent" id="resTrigger">–</div></div>
             </div>
         </div>
 
@@ -625,6 +641,7 @@ body { font-family: var(--font); background: var(--bg); color: #222; line-height
 
         // Kennzahlen
         document.getElementById('resGesamtbeitraege').textContent = fE(d.gesB);
+        document.getElementById('resGesamtvermoegen').textContent = fE(d.gE);
         document.getElementById('resGarantie').textContent = fE(d.gz);
         document.getElementById('resTrigger').textContent = 'Jahr ' + d.triggerJ;
         document.getElementById('resFonds').textContent = fE(fEnd);
